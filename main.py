@@ -123,6 +123,9 @@ class Main():
 			elif instruction == 'PRINTSTRING':
 				#Output the rest of the line
 				print ' '.join(command[1:])
+			elif instruction == 'REM':
+				#Comment - do nothing
+				pass
 			elif instruction == 'SKIP':
 				#Miss-out the given number of lines
 				return int(command[1]), False

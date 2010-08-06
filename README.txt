@@ -21,3 +21,5 @@ PRINTSTRING: Outputs the remainder of the line to the user
 SKIP: Jump over the given number of lines.
 STORE: Save current value to address
 XOR: Performs a bitwise XOR on the accumulator and the given address
+
+REM is used to denote a comment.

@@ -17,4 +17,7 @@ XOR 1
 STORE 4
 PRINTSTRING XOR:
 PRINT 4
+REM 2 is the AND
+REM 3 is the OR
+REM 4 is the XOR
 END
