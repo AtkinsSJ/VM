@@ -14,3 +14,11 @@ o Branching:
 	AND, OR, NOT, NAND, NOR, XOR, XNOR
 o User input:
 	GET, GETC
+- Pointers:
+	Being able to access memory locations, and jump to lines, bsed on
+	the value of a memory location. Using a location as a pointer is
+	specified by putting an & before its address.
+- More low-level functions:
+	Related to pointers, rewrite commands to use a get_address()
+	function, rather than repeating the code. Similar for any other
+	generic actions.
