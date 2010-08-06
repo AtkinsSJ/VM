@@ -1,0 +1,13 @@
+PRINTSTRING Enter a number
+GET 0
+LOAD 0
+IFPOS
+GOTO 10
+IFNEG
+GOTO 12
+PRINTSTRING Mathematicians are undecided as to whether 0 is positive or negative
+SKIP 3
+PRINTSTRING Your number is positive
+SKIP 1
+PRINTSTRING Your number is negative
+END

@@ -1,0 +1,16 @@
+ROADMAP:
+
+-- Key --
+- TODO
+o Done
+x Cancelled
+
+o Basic commands:
+	STORE, LOAD, ADD
+o Branching:
+	IF skips next instruction if accum is 0
+	SKIP jumps so many instructions ahead
+- Boolean logic:
+	AND, OR, NOT, NAND, NOR, XOR, XNOR
+o User input:
+	GET, GETC

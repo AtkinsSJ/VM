@@ -1,0 +1,11 @@
+PRINTSTRING Simple Addition Program
+PRINTSTRING Please enter your first number
+GET 0
+PRINTSTRING Now enter your second number
+GET 1
+LOAD 0
+ADD 1
+STORE 2
+PRINTSTRING The total is:
+PRINT 2
+END
