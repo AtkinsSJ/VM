@@ -4,29 +4,32 @@ each line. Some instructions take an argument, which comes after the
 instruction name, separated by a space. Whitespace at the beginning of
 lines has no effect.
 
-======== Storage =========
+Storage
+=======
 
 There are two storage areas - the memory, and the accumulator. The
 memory is a theoretically-infinite set of integers, addressable using
 integers. The accumulator is where calculations are carried out. All 
 integers are potentially infinite in length.
 
-======== Pointers =========
+Pointers
+========
 
 Any instruction which takes a memory address as its argument can also
 take a pointer. (eg, using a memory location to store a memory address)
 Pointers are specified by prefixing the address with a P, eg 'P23'.
 
-======== Input/Output ==========
+Input/Output
+============
 
 Values can be read-in from the user using GET and GETC, for getting
 integers and characters respectively. PRINT and PRINTC output a given
 variable as an integer or character. PRINTSTRING outputs the given
 string, but this output is not currently alterable during runtime.
 
-================================
-======= Command Listing ========
-================================
+Command Listing
+===============
+
 ADD: Add value from address
 ADDVAL: Add value
 AND: Performs a bitwise AND on the accumulator and the given address
