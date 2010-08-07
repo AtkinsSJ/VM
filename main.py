@@ -6,22 +6,39 @@
 import sys
 
 class Main():
+	
+	verbose = False
+	
 	def __init__(self):
 		if len(sys.argv) == 2:
-			try:
-				self.file = open( sys.argv[1] ).readlines()
-			except IOError:
-				print 'ERROR: Cannot open', sys.argv[1]
-				sys.exit()
+			self.load_file(sys.argv[1])
+		elif len(sys.argv) > 2:
+			self.load_file(sys.argv[1])
+			for arg in sys.argv[2:]:
+				if arg == '-d':
+					self.verbose = True
+					print 'DEBUG MODE'
+				else:
+					print 'Unrecognised argument:', arg
+					sys.exit()
 		else:
-			print 'Usage:', sys.argv[0], 'FILE'
+			print 'Usage:', sys.argv[0], 'FILE [-d]'
 			sys.exit()
 		
 		self.memory = dict()
 	
+	def load_file(self, filename):
+		try:
+			self.file = open( filename ).readlines()
+		except IOError:
+			print 'ERROR: Cannot open', filename
+			sys.exit()
+	
 	def run(self):
 		i = 0
 		while i < len(self.file):
+			if self.verbose:
+				print 'Line', i
 			command = self.file[i].strip()
 			jump, goto = self.handle(command)
 			i += 1 + jump
@@ -37,15 +54,13 @@ class Main():
 		try:
 			if instruction == 'ADD':
 				#Add address value to accumulator
-				address = int(command[1])
-				self.accumulator += self.memory[address]
+				self.accumulator += self.get_memory(command[1])
 			elif instruction == 'ADDVAL':
 				#Add specified value to accumulator
 				self.accumulator += int(command[1])
 			elif instruction == 'AND':
 				#AND bitwise operation with accumulator and address value
-				address = int(command[1])
-				self.accumulator = self.accumulator & self.memory[address]
+				self.accumulator = self.accumulator & self.get_memory(command[1])
 			elif instruction == 'DEBUG':
 				#Output all memory, and accumulator
 				print '=== DEBUG ==='
@@ -71,8 +86,7 @@ class Main():
 						input = int(raw_input())
 					except ValueError:
 						print 'Please enter a valid integer'
-				address = int(command[1])
-				self.memory[address] = input
+				self.memory[self.get_address(command[1])] = input
 			elif instruction == 'GETC':
 				#Get a character from the user and store it in address
 				input = False
@@ -81,8 +95,7 @@ class Main():
 						input = ord(raw_input())
 					except TypeError:
 						print 'Please enter a single character'
-				address = int(command[1])
-				self.memory[address] = input
+				self.memory[self.get_address(command[1])] = input
 			elif instruction == 'GOTO':
 				#Jump to a specific line
 				return int(command[1])-1, True
@@ -100,8 +113,7 @@ class Main():
 					return 1, False
 			elif instruction == 'LOAD':
 				#Load address value to accumulator
-				address = int(command[1])
-				self.accumulator = self.memory[address]
+				self.accumulator = self.get_memory(command[1])
 			elif instruction == 'LOADVAL':
 				#Load to accumulator
 				self.accumulator = int(command[1])
@@ -110,16 +122,13 @@ class Main():
 				self.accumulator = ~self.accumulator
 			elif instruction == 'OR':
 				#OR bitwise operation with accumulator and address value
-				address = int(command[1])
-				self.accumulator = self.accumulator | self.memory[address]
+				self.accumulator = self.accumulator | self.get_memory(command[1])
 			elif instruction == 'PRINT':
 				#Output the value at address
-				address = int(command[1])
-				print self.memory[address]
+				print self.get_memory(command[1])
 			elif instruction == 'PRINTC':
 				#Output the value at address, as a character
-				address = int(command[1])
-				print chr(self.memory[address])
+				print chr(self.get_memory(command[1]))
 			elif instruction == 'PRINTSTRING':
 				#Output the rest of the line
 				print ' '.join(command[1:])
@@ -131,12 +140,10 @@ class Main():
 				return int(command[1]), False
 			elif instruction == 'STORE':
 				#Store accumulator's value in address
-				address = int(command[1])
-				self.memory[address] = self.accumulator
+				self.memory[self.get_address(command[1])] = self.accumulator
 			elif instruction == 'XOR':
 				#XOR bitwise operation with accumulator and address value
-				address = int(command[1])
-				self.accumulator = self.accumulator ^ self.memory[address]
+				self.accumulator = self.accumulator ^ self.get_memory(command[1])
 			else:
 				print 'ERROR: Instruction', command[0], 'not recognised!'
 				sys.exit()
@@ -148,6 +155,39 @@ class Main():
 			print 'ERROR:', command[1], 'is not a valid memory address!'
 			sys.exit()
 		return 0, False
+	
+	def get_address(self, address):
+		"""Returns a real address, decoding it if a pointer is passed"""
+		if address.startswith('P'):
+			# It's a pointer
+			paddress = address[1:]
+			try:
+				return self.memory[int(paddress)]
+			except KeyError:
+				print 'ERROR: Accessing uninitialised memory at', paddress
+				self.print_mem()
+				sys.exit()
+			except ValueError:
+				print 'ERROR: Pointer address', paddress, 'is not a valid integer'
+				sys.exit()
+		else:
+			# It's a regular address
+			return int(address)
+		
+	def get_memory(self, address):
+		"""Returns a value from an address or pointer address"""
+		pos = self.get_address(address)
+			
+		try:
+			return self.memory[pos]
+		except IndexError:
+			print 'ERROR: Accessing uninitialised memory at', pos
+			sys.exit()
+	
+	def print_mem(self):
+		"""Outputs all used memory locations and their values"""
+		for key, val in self.memory.items():
+			print key, ':', val
 			
 if __name__=="__main__":
 	# call the main function

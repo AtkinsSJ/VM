@@ -11,6 +11,12 @@ memory is a theoretically-infinite set of integers, addressable using
 integers. The accumulator is where calculations are carried out. All 
 integers are potentially infinite in length.
 
+======== Pointers =========
+
+Any instruction which takes a memory address as its argument can also
+take a pointer. (eg, using a memory location to store a memory address)
+Pointers are specified by prefixing the address with a P, eg 'P23'.
+
 ======== Input/Output ==========
 
 Values can be read-in from the user using GET and GETC, for getting
